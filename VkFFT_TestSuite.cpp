@@ -92,6 +92,7 @@
 #ifdef VKFFT_USE_DOUBLEDOUBLE_FP128
 #include "sample_1004_benchmark_VkFFT_quadDoubleDouble_2_4096.h"
 #endif
+#include "sample_verification.h"
 #ifdef USE_cuFFT
 #include "user_benchmark_cuFFT.h"
 #include "sample_0_benchmark_cuFFT_single.h"
@@ -503,6 +504,11 @@ VkFFTResult launchVkFFT(VkGPU* vkGPU, uint64_t sample_id, bool file_output, FILE
 		break;
 	}
 #endif
+    case 9999:  // Add our verification test
+    {
+        resFFT = sample_verification_VkFFT_single(vkGPU, file_output, output, isCompilerInitialized);
+        break;
+    }
     }
 #if(VKFFT_BACKEND==0)
 	vkDestroyFence(vkGPU->device, vkGPU->fence, NULL);
@@ -654,6 +660,7 @@ int main(int argc, char* argv[])
 #ifdef VKFFT_USE_DOUBLEDOUBLE_FP128
 		printf("		1004 - FFT + iFFT C2C benchmark 1D batched in double-double emulation of quad precision: all supported systems from 2 to 4096\n");
 #endif
+		printf("		9999 - FFT verification test with detailed output to file\n");
 		printf("	-benchmark_vkfft: run VkFFT benchmark on a user-defined system:\n\
 		-X uint, -Y uint, -Z uint - FFT dimensions (default Y and Z are 1)\n");
 		printf("\
