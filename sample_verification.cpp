@@ -86,7 +86,13 @@ VkFFTResult sample_verification_VkFFT_single(VkGPU* vkGPU, uint64_t file_output,
     }
 
     // Print input data
+#if (VKFFT_BACKEND==1)
+    FILE* result_file = fopen("fft_verification_results_cuda.txt", "w");
+#elif (VKFFT_BACKEND==3)
+    FILE* result_file = fopen("fft_verification_results_opencl.txt", "w");
+#else
     FILE* result_file = fopen("fft_verification_results.txt", "w");
+#endif
     if (result_file) {
         fprintf(result_file, "FFT Verification Results\n");
         fprintf(result_file, "========================\n\n");
@@ -388,7 +394,13 @@ VkFFTResult sample_verification_VkFFT_single(VkGPU* vkGPU, uint64_t file_output,
     // Cleanup
     if (result_file) {
         fclose(result_file);
+#if (VKFFT_BACKEND==1)
+        printf("\nResults saved to fft_verification_results_cuda.txt\n");
+#elif (VKFFT_BACKEND==3)
+        printf("\nResults saved to fft_verification_results_opencl.txt\n");
+#else
         printf("\nResults saved to fft_verification_results.txt\n");
+#endif
     }
 
     deleteVkFFT(&app);
